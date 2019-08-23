@@ -1,3 +1,8 @@
+
+
+#este script funciona bien
+
+
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
 import logging
