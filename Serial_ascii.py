@@ -2,7 +2,7 @@
 #este script funciona bien
 
 
-from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+from pymodbus.client.sync import ModbusTcpClient as ModbusClient
 
 import logging
 logging.basicConfig()
@@ -16,6 +16,7 @@ print (connection)
 request = client.read_holding_registers(40007, 1, unit=3)
 print(request)
 print (request.registers)
+
 
 
 client.close()

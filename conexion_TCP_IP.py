@@ -5,6 +5,10 @@ import serial.rs485
 import struct 
 
 # Conexion a traves de WZ ST1, la WZ debe estar solo ejecutando este Script para tenga un buen funcionamiento
+import logging
+logging.basicConfig()
+log = logging.getLogger()
+log.setLevel(logging.DEBUG)
 
 
 
