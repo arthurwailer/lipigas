@@ -2,7 +2,7 @@ import socket
 
 servidor = socket.socket()
 servidor.bind(('127.0.0.1',5000))
-servidor.listen(5)
+servidor.listen(1)
 
 while True:
 	conexion, addr = servidor.accept()

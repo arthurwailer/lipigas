@@ -1,0 +1,37 @@
+2019-08-29 19:36:11,79,2059
+2019-08-29 19:36:11 - Exception: <type 'exceptions.NameError'>
+2019-08-29 19:37:14 - Exception: <class 'socket.error'>
+2019-08-29 21:10:46,78,2044
+2019-08-29 21:10:46 - Exception: <type 'exceptions.NameError'>
+2019-08-29 21:15:21,78,2044
+2019-08-29 21:15:21 - Exception: <type 'exceptions.NameError'>
+2019-08-29 21:16:32 - Exception: <class 'socket.gaierror'>
+2019-08-29 21:17:43 - Exception: <class 'socket.gaierror'>
+2019-08-29 21:19:43 - Error: 78,None
+2019-08-29 21:20:25 - Exception: <class 'socket.error'>
+2019-08-29 21:21:41 - Exception: <class 'socket.error'>
+2019-08-29 21:23:09,78,2042
+2019-08-29 21:23:09 - Exception: <type 'exceptions.NameError'>
+2019-08-29 21:24:51,78,2041
+2019-08-29 21:24:51 - Exception: <type 'exceptions.NameError'>
+2019-08-29 21:44:21 - Error: None,None
+2019-08-29 21:47:54 - Error: None,None
+2019-08-29 21:52:04 - Error: None,None
+2019-08-30 14:38:05 - Exception: <type 'exceptions.NameError'>
+2019-08-30 14:40:02 - Exception: <type 'exceptions.TypeError'>
+2019-08-30 14:40:26 - Exception: <type 'exceptions.NameError'>
+2019-08-30 14:41:03,63,1699
+2019-08-30 14:41:03 - Exception: <type 'exceptions.NameError'>
+2019-08-30 16:31:36 - Exception: <class 'socket.error'>
+2019-08-30 16:32:59,62,1681
+2019-08-30 16:32:59 - Exception: <type 'exceptions.NameError'>
+2019-08-30 20:36:14,80,2090
+2019-08-30 20:36:14 - Exception: <type 'exceptions.NameError'>
+2019-08-30 20:37:36,80,2090
+2019-08-30 20:37:36 - Exception: <type 'exceptions.NameError'>
+2019-08-30 21:11:35,80,2089
+2019-08-30 21:11:35 - Exception: <type 'exceptions.NameError'>
+2019-08-30 21:12:38 - Exception: <class 'socket.error'>
+2019-08-30 21:13:56 - Exception: <type 'exceptions.TypeError'>
+2019-08-30 21:15:07 - Exception: <type 'exceptions.TypeError'>
+2019-09-02 20:01:41 - Error: 0,0

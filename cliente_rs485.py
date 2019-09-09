@@ -11,7 +11,7 @@ while True:
 		client.connect(('192.168.101.1',5000))#conectadome al servidor RUT955 con su ip y puerto
 		print "Conectado"
 		print 'Enviando mje'
-		client.send(40007)
+		client.send('030300070001')
 		print 'mje enviado'
 		respuesta = client.recv(1024)
 		print str(respuesta)
