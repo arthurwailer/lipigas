@@ -28,6 +28,7 @@ import logging
 logging.basicConfig()
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
+import pyodbc 
 
 def recv_end(the_socket):
     total_data=[];data=''
@@ -93,6 +94,7 @@ def volumen(ip,port):
     try:
         tcpSocket.connect((ip, port))
         print "conectado"
+        print "consiguiendo volumen"
         volume = receive(tcpSocket, '0303000B0001')
         #height = receive(tcpSocket, '030300070001')
         #status = receive(tcpSocket, '030300020000' )
@@ -126,6 +128,7 @@ def altura(ip,port):
     try:
         tcpSocket.connect((ip, port))
         print "conectado"
+        print "consiguiendo altura"
         #volume = receive(tcpSocket, '0303000B0001')
         height = receive(tcpSocket, '030300070001')
         #status = receive(tcpSocket, '030300020000' )
@@ -149,12 +152,29 @@ def altura(ip,port):
 
     time.sleep(5)
 
+
+def insertBBDD(altura,volumen):
+    try:
+        conn = pyodbc.connect('Driver={SQL Server};'
+                            'Server=DESKTOP-SI75KO8\SQLEXPRESS;'
+                            'Database=ESTANQUES;'
+                            'Trusted_Connection=yes;')
+        if conn:
+            print "Connectado a la BBDD"
+            cursor = conn.cursor()
+            #hora = (CURRENT_TIMESTAMP) 
+            print "insertando datos a la base de datos de lipigas"
+            consulta = "INSERT INTO ESTANQUES.dbo.ESTANQUES(HORA,ALTURA,VOLUMEN) VALUES (CURRENT_TIMESTAMP,?,?);"
+            cursor.execute(consulta, (altura,volumen))
+            print "Datos insertos en la BBDD"
+        else:
+            print "Can't Connect to BBDD"
+    except Exception as e:
+
+        print ("Ocurrio un error al tratar de conectar a la BBDD",e)
+    finally:
+        conn.commit()
+        cursor.close()
+        conn.close()
+
 time.sleep(5)
-
-
-
-
-# altura = altura('192.168.101.1',5050)
-# print altura
-# volumen = volumen('192.168.101.1',5050)
-# print volumen 
