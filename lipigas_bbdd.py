@@ -1,16 +1,13 @@
 import pyodbc 
 import time
 import datetime
-import lipigas_test
+import lipigas_prueba
 
 while True:
-	altura = lipigas_test.altura('192.168.101.1',5050)
+	altura= lipigas_prueba.altura('192.168.101.1',5050)
 	print altura
+	insertBBDD=lipigas_prueba.insertBBDD(altura)
 	time.sleep(2)
-	volumen = lipigas_test.volumen('192.168.101.1',5050)
-	print volumen
-	insertBBDD=lipigas_test.insertBBDD(altura,volumen)
-	time.sleep(60)
 
 # 		conn = pyodbc.connect('Driver={SQL Server};'
 # 	                      	'Server=DESKTOP-SI75KO8\SQLEXPRESS;'
