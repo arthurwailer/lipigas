@@ -4,10 +4,20 @@ import datetime
 import lipigas_prueba
 
 while True:
-	altura= lipigas_prueba.altura('192.168.101.1',5050)
-	print altura
-	insertBBDD=lipigas_prueba.insertBBDD(altura)
-	time.sleep(2)
+
+	### guarda en una variable la altura entregandole como variable ip y puerto
+
+	alturaEstanque1 = lipigas_prueba.alturaCuatro('192.168.121.1',6060)
+	alturaEstanque2 = lipigas_prueba.alturaTres('192.168.122.1',6060)
+	alturaEstanque3 = lipigas_prueba.alturaCuatro('192.168.123.1',6060)
+
+	#insertBBDD recibe 2 variable , altura y id del estanque y los inserta en la BBDD SQL SERVER.
+
+	insertBBDD=lipigas_prueba.insertBBDD(alturaEstanque1,1)
+	#time.sleep(2)
+	insertBBDD=lipigas_prueba.insertBBDD(alturaEstanque2,2)
+	#time.sleep(2)
+	insertBBDD=lipigas_prueba.insertBBDD(alturaEstanque3,3)
 
 # 		conn = pyodbc.connect('Driver={SQL Server};'
 # 	                      	'Server=DESKTOP-SI75KO8\SQLEXPRESS;'

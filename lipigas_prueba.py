@@ -69,7 +69,7 @@ def recv_timeout(the_socket,timeout=10):
             pass
     return ''.join(total_data)
 
-def receive(socket, cmd):
+def receiveCuatro(socket, cmd):
     crc = ('%02x' % computeLRC(a2b_hex(cmd))).encode()
     send = (':' + cmd + crc + '\r\n').upper()
     print "Sending data: " + send
@@ -121,25 +121,26 @@ def volumen(ip,port):
 time.sleep(5)
 
 
-def altura(ip,port):
+def alturaCuatro(ip,port):
     #while True:
 
     tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         tcpSocket.connect((ip, port))
-        print "conectado"
+        print "conectado al socket"
         print "consiguiendo altura"
         #volume = receive(tcpSocket, '0303000B0001')
-        height = receive(tcpSocket, '030300070001')
+        height = receiveCuatro(tcpSocket, '030300070001')
         #status = receive(tcpSocket, '030300020000' )
         print "altura obtenida"
+        print height
         #print str(status)
         try:
-            if height>0 and height<2000 and height is not None:
+            if height>=0 and height<2000 and height is not None:
                 #print str(volume/10.0), "%"
-                return height/10.0
+                return height
             else:
-                print "volume is None or Zero"
+                print "altura is None or Zero"
                 #print "height is None or Zero"
         except:
             print "Error, no Succes"
@@ -153,24 +154,24 @@ def altura(ip,port):
     time.sleep(5)
 
 
-def insertBBDD(altura_raw):
+def insertBBDD(altura_raw,estanque_id):
     try:
         conn = pyodbc.connect('Driver={SQL Server};'
-                            'Server=DESKTOP-SI75KO8\SQLEXPRESS;'
-                            'Database=ESTANQUES;'
+                            'Server=DESKTOP-HPBR3L8\SQLEXPRESS;'
+                            'Database=fuel-explorer;'
                             'Trusted_Connection=yes;')
         if conn:
             print "Connectado a la BBDD"
             cursor = conn.cursor()
-            #angulo_roll = 20.6
-            #hora = (CURRENT_TIMESTAMP) 
             print "insertando datos a la base de datos de lipigas"
             consulta ='''INSERT INTO [fuel-explorer].db_owner.estanque_lecturas(
+                estanque_id,
                 altura_raw,
                 fecha_hora_lectura_sensor,
-                fecha_hora_recepcion)
-                VALUES (?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);'''
-            cursor.execute(consulta, (altura_raw))
+                fecha_hora_recepcion,
+                created_at)
+                VALUES (?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);'''
+            cursor.execute(consulta, (estanque_id, altura_raw))
             print "Datos insertos en la BBDD"
         else:
             print "Can't Connect to BBDD"
@@ -182,4 +183,61 @@ def insertBBDD(altura_raw):
         cursor.close()
         conn.close()
 
-time.sleep(5)
+def alturaTres(ip,port):
+    #while True:
+
+    tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        tcpSocket.connect((ip, port))
+        print "conectado al socket"
+        print "consiguiendo altura"
+        #volume = receive(tcpSocket, '0303000B0001')
+        height = receiveTres(tcpSocket, '030300070001')
+        #status = receive(tcpSocket, '030300020000' )
+        print "altura obtenida"
+        print height
+        #print str(status)
+        try:
+            if height>0 and height<2000 and height is not None:
+                #print str(volume/10.0), "%"
+                return height
+            else:
+                print "altura is None or Zero"
+                #print "height is None or Zero"
+        except:
+            print "Error, no Succes"
+
+            # En las siguientes lineas escribir en la base de datos los datos obtenidos
+    except:
+        print "Can't connect..."
+    finally: #finally se ejecutar sin importar si el bloque try genera un error o no.
+        tcpSocket.close()
+
+    time.sleep(5)
+
+def receiveTres(socket, cmd):
+    crc = ('%02x' % computeLRC(a2b_hex(cmd))).encode()
+    send = (':' + cmd + crc + '\r\n').upper()
+    print "Sending data: " + send
+    socket.send(send)
+
+    print "Receiving data..."
+    message = recv_timeout(socket)
+
+    if (len(message) > 0):
+
+        print 'Received: ' + message 
+
+        hex_val = a2b_hex(message[7:len(message)-3])
+        return int(hex_val.encode('hex'), 16)
+
+    return None
+
+
+#_______ actualizar tabla con el ultimo dato adquirido___________
+
+# UPDATE [fuel-explorer].db_owner.estanques
+# SET [fuel-explorer].db_owner.estanques.fecha_hora_lectura= [fuel-explorer].db_owner.estanque_lecturas.fecha_hora_lectura_sensor
+# FROM [fuel-explorer].db_owner.estanques, [fuel-explorer].db_owner.estanque_lecturas
+# WHERE [fuel-explorer].db_owner.estanques.id = [fuel-explorer].db_owner.estanque_lecturas.estanque_id
+
