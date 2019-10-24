@@ -153,6 +153,33 @@ def alturaCuatro(ip,port):
 
     time.sleep(5)
 
+def updateBBDD(numero):
+
+    try:
+        conn = pyodbc.connect('Driver={SQL Server};'
+                            'Server=DESKTOP-HPBR3L8\SQLEXPRESS;'
+                            'Database=fuel-explorer;'
+                            'Trusted_Connection=yes;')
+        if conn:
+            
+            print "Connectado a la BBDD"
+            cursor = conn.cursor()
+            print "actualizando fecha en la tabla estanques"
+            cursor.execute('SELECT * FROM [fuel-explorer].db_owner.estanques')
+            cursor.execute('''UPDATE [fuel-explorer].db_owner.estanques set fecha_hora_lectura=CURRENT_TIMESTAMP
+                where equipo_id={0}'''.format(numero))
+            print "datos actualizados"
+        else:
+            print "nose pudo actualizar la BBDD"
+    except Exception as e:
+
+        print ("Ocurrio un error al tratar de conectar a la BBDD update",e)
+    finally:
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+
 
 def insertBBDD(altura_raw,estanque_id):
     try:
@@ -172,12 +199,14 @@ def insertBBDD(altura_raw,estanque_id):
                 created_at)
                 VALUES (?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);'''
             cursor.execute(consulta, (estanque_id, altura_raw))
+            
+
             print "Datos insertos en la BBDD"
         else:
             print "Can't Connect to BBDD"
     except Exception as e:
 
-        print ("Ocurrio un error al tratar de conectar a la BBDD",e)
+        print ("Ocurrio un error al tratar de conectar a la BBDD insertos",e)
     finally:
         conn.commit()
         cursor.close()

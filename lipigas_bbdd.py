@@ -14,10 +14,15 @@ while True:
 	#insertBBDD recibe 2 variable , altura y id del estanque y los inserta en la BBDD SQL SERVER.
 
 	insertBBDD=lipigas_prueba.insertBBDD(alturaEstanque1,1)
+	updateBBDD= lipigas_prueba.updateBBDD(1)
 	#time.sleep(2)
 	insertBBDD=lipigas_prueba.insertBBDD(alturaEstanque2,2)
+	updateBBDD= lipigas_prueba.updateBBDD(2)
 	#time.sleep(2)
 	insertBBDD=lipigas_prueba.insertBBDD(alturaEstanque3,3)
+	updateBBDD= lipigas_prueba.updateBBDD(3)
+
+
 
 # 		conn = pyodbc.connect('Driver={SQL Server};'
 # 	                      	'Server=DESKTOP-SI75KO8\SQLEXPRESS;'
