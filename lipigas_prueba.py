@@ -69,23 +69,6 @@ def recv_timeout(the_socket,timeout=10):
             pass
     return ''.join(total_data)
 
-def receiveCuatro(socket, cmd):
-    crc = ('%02x' % computeLRC(a2b_hex(cmd))).encode()
-    send = (':' + cmd + crc + '\r\n').upper()
-    print "Sending data: " + send
-    socket.send(send)
-
-    print "Receiving data..."
-    message = recv_timeout(socket)
-
-    if (len(message) > 0):
-
-        print 'Received: ' + message 
-
-        hex_val = a2b_hex(message[7:len(message)-4])
-        return int(hex_val.encode('hex'), 16)
-
-    return None
 
 def volumen(ip,port):
     #while True:
@@ -262,6 +245,23 @@ def receiveTres(socket, cmd):
 
     return None
 
+def receiveCuatro(socket, cmd):
+    crc = ('%02x' % computeLRC(a2b_hex(cmd))).encode()
+    send = (':' + cmd + crc + '\r\n').upper()
+    print "Sending data: " + send
+    socket.send(send)
+
+    print "Receiving data..."
+    message = recv_timeout(socket)
+
+    if (len(message) > 0):
+
+        print 'Received: ' + message 
+
+        hex_val = a2b_hex(message[7:len(message)-4])
+        return int(hex_val.encode('hex'), 16)
+
+    return None
 
 #_______ actualizar tabla con el ultimo dato adquirido___________
 
