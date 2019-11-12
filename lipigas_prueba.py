@@ -70,7 +70,7 @@ def recv_timeout(the_socket,timeout=10):
     return ''.join(total_data)
 
 
-def volumen(ip,port):
+def volumenTres(ip,port):
     #while True:
 
     tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -78,7 +78,7 @@ def volumen(ip,port):
         tcpSocket.connect((ip, port))
         print "conectado"
         print "consiguiendo volumen"
-        volume = receive(tcpSocket, '0303000B0001')
+        volume = receiveTres(tcpSocket, '0303000B0001')
         #height = receive(tcpSocket, '030300070001')
         #status = receive(tcpSocket, '030300020000' )
         print "volumen obtenido"
@@ -101,29 +101,27 @@ def volumen(ip,port):
 
     time.sleep(5)
 
-time.sleep(5)
 
 
-def alturaCuatro(ip,port):
+def volumenCuatro(ip,port):
     #while True:
 
     tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         tcpSocket.connect((ip, port))
-        print "conectado al socket"
-        print "consiguiendo altura"
-        #volume = receive(tcpSocket, '0303000B0001')
-        height = receiveCuatro(tcpSocket, '030300070001')
+        print "conectado"
+        print "consiguiendo volumen"
+        volume = receiveCuatro(tcpSocket, '0303000B0001')
+        #height = receive(tcpSocket, '030300070001')
         #status = receive(tcpSocket, '030300020000' )
-        print "altura obtenida"
-        print height
+        print "volumen obtenido"
         #print str(status)
         try:
-            if height>=0 and height<2000 and height is not None:
-                #print str(volume/10.0), "%"
-                return height
+            if volume is not None and volume>0 and volume < 1000:
+                return volume/10.0
+                #print str(height/10.0), "[cm]"
             else:
-                print "altura is None or Zero"
+                print "volume is None or Zero"
                 #print "height is None or Zero"
         except:
             print "Error, no Succes"
@@ -136,64 +134,7 @@ def alturaCuatro(ip,port):
 
     time.sleep(5)
 
-def updateBBDD(numero):
 
-    try:
-        conn = pyodbc.connect('Driver={SQL Server};'
-                            'Server=DESKTOP-HPBR3L8\SQLEXPRESS;'
-                            'Database=fuel-explorer;'
-                            'Trusted_Connection=yes;')
-        if conn:
-            
-            print "Connectado a la BBDD"
-            cursor = conn.cursor()
-            print "actualizando fecha en la tabla estanques"
-            cursor.execute('SELECT * FROM [fuel-explorer].db_owner.estanques')
-            cursor.execute('''UPDATE [fuel-explorer].db_owner.estanques set fecha_hora_lectura=CURRENT_TIMESTAMP
-                where equipo_id={0}'''.format(numero))
-            print "datos actualizados"
-        else:
-            print "nose pudo actualizar la BBDD"
-    except Exception as e:
-
-        print ("Ocurrio un error al tratar de conectar a la BBDD update",e)
-    finally:
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-
-
-def insertBBDD(altura_raw,estanque_id):
-    try:
-        conn = pyodbc.connect('Driver={SQL Server};'
-                            'Server=DESKTOP-HPBR3L8\SQLEXPRESS;'
-                            'Database=fuel-explorer;'
-                            'Trusted_Connection=yes;')
-        if conn:
-            print "Connectado a la BBDD"
-            cursor = conn.cursor()
-            print "insertando datos a la base de datos de lipigas"
-            consulta ='''INSERT INTO [fuel-explorer].db_owner.estanque_lecturas(
-                estanque_id,
-                altura_raw,
-                fecha_hora_lectura_sensor,
-                fecha_hora_recepcion,
-                created_at)
-                VALUES (?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);'''
-            cursor.execute(consulta, (estanque_id, altura_raw))
-            
-
-            print "Datos insertos en la BBDD"
-        else:
-            print "Can't Connect to BBDD"
-    except Exception as e:
-
-        print ("Ocurrio un error al tratar de conectar a la BBDD insertos",e)
-    finally:
-        conn.commit()
-        cursor.close()
-        conn.close()
 
 def alturaTres(ip,port):
     #while True:
@@ -227,6 +168,38 @@ def alturaTres(ip,port):
 
     time.sleep(5)
 
+
+def alturaCuatro(ip,port):
+    #while True:
+
+    tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        tcpSocket.connect((ip, port))
+        print "conectado al socket"
+        print "consiguiendo altura"
+        #volume = receive(tcpSocket, '0303000B0001')
+        height = receiveCuatro(tcpSocket, '030300070001')
+        #status = receive(tcpSocket, '030300020000' )
+        print "altura obtenida"
+        print height
+        #print str(status)
+        try:
+            if height>=0 and height<2000 and height is not None:
+                #print str(volume/10.0), "%"
+                return height
+            else:
+                print "altura is None or Zero"
+                #print "height is None or Zero"
+        except:
+            print "Error, no Succes"
+
+            # En las siguientes lineas escribir en la base de datos los datos obtenidos
+    except:
+        print "Can't connect..."
+    finally: #finally se ejecutar sin importar si el bloque try genera un error o no.
+        tcpSocket.close()
+
+    time.sleep(5)
 def receiveTres(socket, cmd):
     crc = ('%02x' % computeLRC(a2b_hex(cmd))).encode()
     send = (':' + cmd + crc + '\r\n').upper()
@@ -262,6 +235,68 @@ def receiveCuatro(socket, cmd):
         return int(hex_val.encode('hex'), 16)
 
     return None
+
+
+def updateBBDD(numero):
+
+    try:
+        conn = pyodbc.connect('Driver={SQL Server};'
+                            'Server=DESKTOP-HPBR3L8\SQLEXPRESS;'
+                            'Database=fuel-explorer;'
+                            'Trusted_Connection=yes;')
+        if conn:
+            
+            print "Connectado a la BBDD"
+            cursor = conn.cursor()
+            print "actualizando fecha en la tabla estanques"
+            cursor.execute('SELECT * FROM [fuel-explorer].db_owner.estanques')
+            cursor.execute('''UPDATE [fuel-explorer].db_owner.estanques set fecha_hora_lectura=CURRENT_TIMESTAMP
+                where equipo_id={0}'''.format(numero))
+            print "datos actualizados"
+        else:
+            print "nose pudo actualizar la BBDD"
+    except Exception as e:
+
+        print ("Ocurrio un error al tratar de conectar a la BBDD update",e)
+    finally:
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+
+
+def insertBBDD(altura_raw,estanque_id,volumen_calculado):
+    try:
+        conn = pyodbc.connect('Driver={SQL Server};'
+                            'Server=DESKTOP-HPBR3L8\SQLEXPRESS;'
+                            'Database=fuel-explorer;'
+                            'Trusted_Connection=yes;')
+        if conn:
+            print "Connectado a la BBDD"
+            cursor = conn.cursor()
+            print "insertando datos a la base de datos de lipigas"
+            consulta ='''INSERT INTO [fuel-explorer].db_owner.estanque_lecturas(
+                estanque_id,
+                altura_raw,
+                volumen_calculado,
+                fecha_hora_lectura_sensor,
+                fecha_hora_recepcion,
+                created_at)
+                VALUES (?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);'''
+            cursor.execute(consulta, (estanque_id, altura_raw,volumen_calculado))
+            
+
+            print "Datos insertos en la BBDD"
+        else:
+            print "Can't Connect to BBDD"
+    except Exception as e:
+
+        print ("Ocurrio un error al tratar de conectar a la BBDD insertos",e)
+    finally:
+        conn.commit()
+        cursor.close()
+        conn.close()
+
 
 #_______ actualizar tabla con el ultimo dato adquirido___________
 
